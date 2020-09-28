@@ -19,7 +19,7 @@ struct sched_param param;
 void* firstThread(void *arg);
 void* secondThread(void *arg);
 void* bufferThread(void *arg);
-char buffer[20];
+char buffer[5000];
 
 FILE *filePtr1;
 FILE *filePtr2;
@@ -38,13 +38,11 @@ int main(){
         return -1;
     }
 
-    int rc;
-    pthread_t thread1;
-    pthread_t thread2; 
-    pthread_t thread3;
+    int rc; 
     period_info pinfo;
 
     //creating thread1
+    pthread_t thread1;
     rc = pthread_create(&thread1, NULL, firstThread, (void*) &pinfo); 
     if (rc) {
             printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -54,6 +52,7 @@ int main(){
     rc = pthread_join(thread1, NULL);
 
     //creating thread2
+    pthread_t thread2;
     rc = pthread_create(&thread2, NULL, secondThread, (void*) &pinfo); 
     if (rc) {
             printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -62,7 +61,8 @@ int main(){
     //waiting for thread to end to continue to the next. 
     rc = pthread_join(thread2, NULL);
 
-    //creating thread1
+    //creating thread3
+    pthread_t thread3;
     rc = pthread_create(&thread3, NULL, bufferThread, (void*) &pinfo); 
     if (rc) {
             printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -156,7 +156,7 @@ void* bufferThread(void *structArg){
         return 1;
     }
 
-    
+
 
     fputs(buffer, filePtr3);
     printf("%s\n", buffer);
